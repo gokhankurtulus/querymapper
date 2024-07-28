@@ -51,6 +51,9 @@ trait ModelInteractions
     final public static function get(?int $limit = null, ?int $offset = 0): ModelCollection
     {
         $entities = new ModelCollection([], static::getTable());
+        if (!static::isStateStarted()) {
+            static::select();
+        }
         if (!is_null($limit)) {
             static::limit($limit, $offset);
         }
