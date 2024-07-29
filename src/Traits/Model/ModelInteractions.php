@@ -75,11 +75,14 @@ trait ModelInteractions
         return static::getInstance();
     }
 
-    final public static function count(array $fields = ['*']): static
+    final public static function count(array $fields = ['*'], ?string $as = null): static
     {
-        static::getBuilder()
-            ?->count($fields)
-            ->from(static::getTable());
+        static::getBuilder()->setIndexColumn(static::getIndexColumn())
+            ->count($fields);
+        if ($as) {
+            static::getBuilder()->as($as);
+        }
+        static::getBuilder()->from(static::getTable());
         static::setStateStarted(true);
         return static::getInstance();
     }
